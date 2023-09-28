@@ -7,8 +7,6 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
@@ -18,10 +16,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Run a one-line script
-        run: echo Hello, world!
+      - name: Use Node.js
+        uses: actions/setup-node@v3
 
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+      - run: npm i -g snyk
+      - run: snyk auth ${{ secrets.SNYK_TOKEN }}
+      - run: snyk monitor --all-projects -d
+        working-directory: ./
